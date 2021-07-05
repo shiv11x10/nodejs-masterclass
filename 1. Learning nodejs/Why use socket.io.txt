@@ -1,0 +1,51 @@
+In our application when we send a post req and update the application we have to refresh it to view the changes with get request.
+
+What socket does is it tells the client when the data is automatically.
+
+This way client does not have to refresh and ask for messages again and again. Server will tell itself if there are any updates.
+
+Socket.io makes it easy to use. The two-way persistent connenction established.
+
+download socket.io - 
+npm install -s socket.io
+
+--------------------------------------------------------------------------
+
+Connect to Socket.io from the browser app
+
+We are able to send requests from the client or browser to Node, but there is no way to do it in reverse. 
+There's no way for Node to tell one or more clients, hey, there's a new message, so the only way to achieve this behavior 
+with HTTP requests is to do something called polling. With polling, every few seconds we send an HTTP request asking the server, 
+hey, are there any updates? Are there new messages I should display? And we check over and over. 
+It would be much better if the server could just tell the client when a new message comes in without the clients 
+having to constantly check. You can think of it as a bunch of kids in a van asking the parents every minute, 
+hey, are we there yet? The parents might plead with the kids to stop asking at one point, 
+and that they will tell the kids when they arrive instead of them asking. This is how WebSockets work and we will be using a 
+WebSocket library called Socket.IO that works for both the browser and for Node. With Socket.IO, we will be able to notify 
+clients or the app running in the browser when another user has sent a chat message, that way the app will update their 
+message list instantly. You might have heard of push notifications, where a server pushes an update or a message to a 
+client or multiple clients, this works the same way. The nice thing about the Socket.IO library is that if a browser 
+is older and does not support WebSockets, it will default back to polling and it has that functionality built in so 
+it will always work, even if it's not as efficient with older browsers. So, let's begin by installing Socket.IO with npm. 
+So, I've opened up a new Terminal, and I'll use npm install -s socket.io. Setting up Socket.IO is a bit tricker than most
+ of the other packages, that's because it needs to tie in with Express, and the game plan is that we'll create a regular HTTP server 
+with Node that will then share with Express and Socket.IO. So, let's open up our server.js, and first let's set up that HTTP server. 
+So, below line three, let's add var http require then we'll use the HTTP library from Node and we'll call .Server on the require 
+itself and pass in our Express app, then let's create io and set it to require socket.io and we'll pass in reference to http. 
+Now that Socket.IO is set up on the backend, let's set it up for the front end, so let's open up our index.html and at 
+the bottom of the tags, after line five, well add a new tag, and set src to /socket.io/socket.io.js, and now let's check out 
+webpage for any errors. So, I'll refresh and we can see that we are getting an error and we're unable to find the Socket.IO 
+JavaScript file we included. The problem is that we can't directly serve our backend with just Express any longer. 
+We will use the Node HTTP server so that way both Express and Socket.IO will be running. So, inside our server.js, 
+we can do that by replacing our existing listen code on line 25 with http.listen instead. Let's save that and give it 
+another try in our browser, so I'll refresh, we're no longer getting an error, and if we look at the Network tab, 
+we can see we're getting the Socket.IO JavaScript file. Next let's go down to the script element in our HTTP file a
+nd initialize Socket.IO. So, at the top of our tag, we'll create a variable called socket and we'll set it to io. 
+This initialization will also try to make a connection to the Socket.IO server at the same URL that the current 
+page is being hosted on. Let's set up a callback for the socket connection event that will let us know whenever 
+a new user connects, so let's save this and then go into our server.js file, and below our post messages, 
+we'll add io.on and we'll check for the connection event, and we'll supply a function that takes in a socket. 
+And for now, let's console.log a user connected, let's save that. Let's open up our Terminal and go to our nodemon, 
+then let's refresh our page. And now, back in nodemon, we can see that a Socket.IO connection has successfully been made 
+from the browser since we're getting a message in the connection event and we can see a user connected in our Console. 
+Next let's look at how to create the message event to update all of the clients at once.

@@ -1,0 +1,13 @@
+1. install jasmine with:
+npm install --save-dev jasmine
+
+2. initialize jasmine with:
+./node_modules/.bin/jasmine initialize
+
+3. change scripts test in package.json to:
+"scripts": {
+    "test": "jasmine"
+  },
+
+4. For making get request in server.spec file use axios API:
+npm install --save-dev axios
